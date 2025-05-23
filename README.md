@@ -1,9 +1,3 @@
-Andrew Obinna Onyekwere
-Anthony Eghosasere Izekor
-Daphne Avril Museruka
-Gilbert Kabunyu
-Gleyson Douglas Samp
-
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
