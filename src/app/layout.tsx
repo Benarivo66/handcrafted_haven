@@ -2,7 +2,7 @@ import '@/app/ui/global.css'
 import { openSans } from '@/app/ui/fonts';
 import { Metadata } from 'next';
 import { Footer } from './ui/footer';
-import { Header } from './ui/header';
+import Header from './ui/header';
  
 export const metadata: Metadata = {
   title: {
