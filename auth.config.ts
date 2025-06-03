@@ -1,39 +1,27 @@
 import type { NextAuthConfig } from 'next-auth';
- 
-// export const authConfig = {
-//   pages: {
-//     signIn: '/login',
-//   },
-//   callbacks: {
-//     authorized({ auth, request: { nextUrl } }) {
-//       const isLoggedIn = !!auth?.user;
-//       const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
-//       if (isOnDashboard) {
-//         if (isLoggedIn) return true;
-//         return false; // Redirect unauthenticated users to login page
-//       } else if (isLoggedIn) {
-//         return Response.redirect(new URL('/dashboard', nextUrl));
-//       }
-//       return true;
-//     },
-//   },
-//   providers: [], // Add providers with an empty array for now
-// } satisfies NextAuthConfig;
 
-export const authConfig = {
+export const authConfig: NextAuthConfig = {
   pages: {
     signIn: '/login',
   },
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isOnDashboard = nextUrl.pathname.startsWith('/dashboard');
+      const user = auth?.user;
+      const isLoggedIn = !!user;
+      const isDashboardRoute = /^\/dashboard(\/|$)/.test(nextUrl.pathname);
 
-      if (isOnDashboard) {
-        return isLoggedIn;
+      console.log('[Auth Middleware]', {
+        pathname: nextUrl.pathname,
+        isLoggedIn,
+        user,
+      });
+
+      if (isDashboardRoute) {
+        return isLoggedIn; 
       }
-      return true;
+
+      return true; 
     },
   },
   providers: [],
-} satisfies NextAuthConfig;
+};

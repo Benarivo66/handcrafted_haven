@@ -8,9 +8,9 @@ export default function Header() {
         <h1 className="text-2xl font-bold text-gray-800">Team5 Handcraft Haven</h1>
         <nav className="space-x-6">
           <Link href="/" className="text-gray-700 hover:text-green-600 transition">Home</Link>
-          <Link href="#about" className="text-gray-700 hover:text-green-600 transition">About</Link>
-          <Link href="#products" className="text-gray-700 hover:text-green-600 transition">Shop</Link>
-          <Link href="#contact" className="text-gray-700 hover:text-green-600 transition">Contact</Link>
+          <Link href="/dashboard/sellers/" className="text-gray-700 hover:text-green-600 transition">Sellers</Link>
+          <Link href="/dashboard/products/" className="text-gray-700 hover:text-green-600 transition">Products</Link>
+          <Link href="/login" className="text-gray-700 hover:text-green-600 transition">Login</Link>
         </nav>
       </div>
     </header>
