@@ -1,10 +1,10 @@
 import { fetchSellerWithProducts } from "@/app/lib/data";
 interface SellerPageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function Page({ params }: SellerPageProps) {
-  const seller = await fetchSellerWithProducts(params.id);
+  const seller = await fetchSellerWithProducts((await params).id);
 
   return (
     <div className="p-4">
