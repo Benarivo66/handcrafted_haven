@@ -20,7 +20,7 @@ export default function Page() {
       Preserving heritage through handmade art
     </p>
     <a
-      href="#"
+      href="/dashboard/products/"
       className="inline-block mt-6 bg-secondary hover:bg-opacity-80 text-white font-semibold px-6 py-3 rounded transition"
     >
       Shop Now
