@@ -1,8 +1,10 @@
 import postgres from 'postgres';
+import {users, products, reviews} from './placeholder-data';
 import {
     SellerField,
     ProductField,
-    SellerWithProductsField
+    SellerWithProductsField, 
+    ReviewField
 } from './definitions';
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
@@ -105,3 +107,44 @@ export async function fetchSellerWithProducts(sellerId: string): Promise<SellerW
   }
 }
 
+
+// Get single product by ID
+export async function getProductById(id: string): Promise<ProductField | undefined> {
+  return products.find(product => product.id === id);
+}
+
+// Get reviews for product
+export async function getReviewsByProductId(productId: string): Promise<ReviewField[]> {
+  return reviews.filter(review => review.productId === productId);
+}
+
+// Add new review
+export async function addReview(reviewData: Omit<ReviewField, 'id' | 'createdAt'>): Promise<ReviewField> {
+  const newReview: ReviewField = {
+    id: `rev_${Date.now()}`, // Simple unique ID
+    ...reviewData,
+  };
+  
+  // In a real app, you would save to database here
+  // For now, we'll just push to the placeholder array
+  reviews.push(newReview);
+  
+  return newReview;
+}
+
+// Get seller by ID
+export async function getSellerById(id: string) {
+  return users.find(user => user.id === id);
+}
+
+export async function getProductsWithRatings(): Promise<
+  Array<ProductField & { averageRating?: number }>
+> {
+  return products.map(product => {
+    const productReviews = reviews.filter(r => r.productId === product.id);
+    const averageRating = productReviews.length > 0 
+      ? Number((productReviews.reduce((sum, r) => sum + r.rating, 0) / productReviews.length).toFixed(1))
+      : undefined;
+    return { ...product, averageRating };
+  });
+}

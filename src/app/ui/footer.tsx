@@ -14,7 +14,7 @@ return (
           <h4 className="font-semibold text-gray-800 mb-2">Quick Links</h4>
           <ul className="space-y-1">
             <li><a href="#about" className="hover:underline">About Us</a></li>
-            <li><a href="#products" className="hover:underline">Shop</a></li>
+            <li><a href="/dashboard/products/" className="hover:underline">Shop</a></li>
             <li><a href="#contact" className="hover:underline">Contact</a></li>
           </ul>
         </div>
