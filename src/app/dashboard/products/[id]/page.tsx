@@ -5,15 +5,18 @@ import ReviewForm from '@/app/ui/reviewForm';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function ProductPage({ params }: PageProps) {
   try {
+    // Await params before using its properties
+    const { id } = await params;
+    
     // Fetch data in parallel
     const [product, reviews] = await Promise.all([
-      getProductById(params.id),
-      getReviewsByProductId(params.id),
+      getProductById(id),
+      getReviewsByProductId(id),
     ]);
 
     if (!product) {
@@ -61,7 +64,7 @@ export default async function ProductPage({ params }: PageProps) {
                       <div className="flex-1">
                         <div className="flex items-center justify-between">
                           <div>
-                            <p className="font-medium">{reviewer?.name}</p>
+                            <p className="font-medium">{reviewer?.name || 'Anonymous'}</p>
                             <div className="flex text-yellow-400">
                               {'★'.repeat(review.rating)}
                               {'☆'.repeat(5 - review.rating)}

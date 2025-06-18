@@ -4,7 +4,7 @@ import { z } from 'zod';
 import postgres from 'postgres';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
-import { signIn } from '../../..//auth';
+import { signIn } from '../../../auth';
 import { AuthError } from 'next-auth';
 import { addReview as addReviewToDb } from './data';
 
@@ -30,13 +30,13 @@ export async function authenticate(
 export async function addReview(reviewData: {
   productId: string;
   sellerId: string;
-  userId: string;
+  reviewerId: string;
   content: string;
   rating: number;
 }): Promise<{ success: boolean; error?: string }> {
   try {
     // Validate required fields
-    if (!reviewData.userId) {
+    if (!reviewData.reviewerId) {
       return { success: false, error: 'User ID is required' };
     }
 
@@ -48,7 +48,15 @@ export async function addReview(reviewData: {
       return { success: false, error: 'Review must be at least 10 characters' };
     }
 
-    await addReviewToDb(reviewData);
+    // Convert to the format expected by the data layer
+    const reviewForDb = {
+      productId: reviewData.productId,
+      sellerId: reviewData.reviewerId,
+      content: reviewData.content,
+      rating: reviewData.rating
+    };
+
+    await addReviewToDb(reviewForDb);
     revalidatePath(`/dashboard/products/${reviewData.productId}`);
     return { success: true };
   } catch (error) {
