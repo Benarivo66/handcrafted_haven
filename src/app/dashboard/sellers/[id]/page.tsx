@@ -1,4 +1,4 @@
-import { fetchSellerWithProducts } from "@/app/lib/data";
+import { fetchSellerWithProducts } from "@/src/app/lib/data";
 interface SellerPageProps {
   params: Promise<{ id: string }>;
 }

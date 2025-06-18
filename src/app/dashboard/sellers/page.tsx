@@ -1,4 +1,4 @@
-import { fetchSellers } from "@/app/lib/data";
+import { fetchSellers } from "@/src/app/lib/data";
 import Link from 'next/link';
 
 export default async function Page() {

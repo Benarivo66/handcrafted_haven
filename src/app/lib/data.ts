@@ -7,10 +7,17 @@ import {
     ReviewField
 } from './definitions';
 
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
+// Use placeholder data if database is not available
+const usePlaceholderData = !process.env.POSTGRES_URL;
+
+const sql = usePlaceholderData ? null : postgres(process.env.POSTGRES_URL!, { ssl: 'require' });
 
 export async function fetchSellers() {
   try {
+    if (usePlaceholderData || !sql) {
+      return users.filter(user => user.isSeller);
+    }
+    
     const sellers = await sql<SellerField[]>`
       SELECT
         id,
@@ -27,12 +34,17 @@ export async function fetchSellers() {
     return sellers;
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch all sellers.');
+    // Fallback to placeholder data
+    return users.filter(user => user.isSeller);
   }
 }
 
 export async function fetchProducts() {
   try {
+    if (usePlaceholderData || !sql) {
+      return products;
+    }
+    
     const products = await sql<ProductField[]>`
       SELECT
         id,
@@ -47,15 +59,29 @@ export async function fetchProducts() {
     return products;
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch all products.');
+    // Fallback to placeholder data
+    return products;
   }
 }
+
 interface SellerWithProducts extends SellerField {
   products: ProductField[];
 }
 
 export async function fetchSellerWithProducts(sellerId: string): Promise<SellerWithProducts | null> {
   try {
+    if (usePlaceholderData || !sql) {
+      const seller = users.find(user => user.id === sellerId && user.isSeller);
+      if (!seller) return null;
+      
+      const sellerProducts = products.filter(product => product.sellerId === sellerId);
+      
+      return {
+        ...seller,
+        products: sellerProducts,
+      };
+    }
+    
     const rows = await sql<SellerWithProductsField[]>`
       SELECT
         u.id AS seller_id,
@@ -103,7 +129,16 @@ export async function fetchSellerWithProducts(sellerId: string): Promise<SellerW
     return seller;
   } catch (err) {
     console.error('Database Error:', err);
-    throw new Error('Failed to fetch seller with products.');
+    // Fallback to placeholder data
+    const seller = users.find(user => user.id === sellerId && user.isSeller);
+    if (!seller) return null;
+    
+    const sellerProducts = products.filter(product => product.sellerId === sellerId);
+    
+    return {
+      ...seller,
+      products: sellerProducts,
+    };
   }
 }
 

@@ -25,8 +25,8 @@
 
 // src/app/dashboard/products/page.tsx
 import Link from 'next/link';
-import { getProductsWithRatings } from '@/app/lib/data';
-import { reviews } from '@/app/lib/placeholder-data';
+import { getProductsWithRatings } from '@/src/app/lib/data';
+import { reviews } from '@/src/app/lib/placeholder-data';
 
 export default async function ProductsPage() {
   const products = await getProductsWithRatings();

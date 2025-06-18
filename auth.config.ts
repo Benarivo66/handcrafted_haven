@@ -4,23 +4,28 @@ export const authConfig: NextAuthConfig = {
   pages: {
     signIn: '/login',
   },
+  session: {
+    strategy: 'jwt',
+  },
+  trustHost: true,
   callbacks: {
     authorized({ auth, request: { nextUrl } }) {
-      const user = auth?.user;
-      const isLoggedIn = !!user;
-      const isDashboardRoute = /^\/dashboard(\/|$)/.test(nextUrl.pathname);
+      const isLoggedIn = !!auth?.user;
+      const isDashboard = nextUrl.pathname.startsWith('/dashboard');
+      const isHome = nextUrl.pathname === '/';
 
-      console.log('[Auth Middleware]', {
-        pathname: nextUrl.pathname,
-        isLoggedIn,
-        user,
-      });
-
-      if (isDashboardRoute) {
-        return isLoggedIn; 
+      // Block unauthenticated users from dashboard
+      if (isDashboard) {
+        return isLoggedIn;
       }
 
-      return true; 
+      // Redirect authenticated users away from home page to dashboard
+      if (isHome && isLoggedIn) {
+        return Response.redirect(new URL('/dashboard', nextUrl));
+      }
+
+      // Allow everyone else (including unauthenticated users) to access home and login
+      return true;
     },
   },
   providers: [],
