@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { addReview } from '@/app/lib/action';
+import { addReview } from '@/src/app/lib/action';
 
 export default function ReviewForm({ productId, sellerId }: { 
   productId: string;

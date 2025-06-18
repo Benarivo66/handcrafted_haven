@@ -1,7 +1,7 @@
 // src/app/dashboard/products/[id]/page.tsx
-import { getProductById, getReviewsByProductId } from '@/app/lib/data';
-import { users } from '@/app/lib/placeholder-data';
-import ReviewForm from '@/app/ui/reviewForm';
+import { getProductById, getReviewsByProductId } from '@/src/app/lib/data';
+import { users } from '@/src/app/lib/placeholder-data';
+import ReviewForm from '@/src/app/ui/reviewForm';
 import { notFound } from 'next/navigation';
 
 interface PageProps {
